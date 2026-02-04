@@ -451,7 +451,7 @@ async function startSpeech(){
         recognition.onstart=()=>{
             console.log('Speech recognition started');
             const el=document.getElementById('liveText');
-            if(el)el.innerHTML='🎤 <strong>Aufnahme aktiv</strong> - Sprechen Sie jetzt...';
+            if(el)el.textContent='🎤 Aufnahme aktiv - Sprechen Sie jetzt...';
         };
         recognition.onresult=e=>{
             window.speechInterimText='';
@@ -466,7 +466,8 @@ async function startSpeech(){
             if(el){
                 const finalHtml=window.speechFinalText?`<span style="color:var(--text)">${escapeHtml(window.speechFinalText)}</span>`:'';
                 const interimHtml=window.speechInterimText?`<span style="color:var(--muted);font-style:italic">${escapeHtml(window.speechInterimText)}</span>`:'';
-                el.innerHTML=finalHtml+interimHtml||(window.speechFinalText?'':'🎤 Sprechen Sie jetzt...');
+                const combinedHtml=finalHtml+interimHtml;
+                el.innerHTML=combinedHtml||'🎤 Sprechen Sie jetzt...';
             }
         };
         recognition.onend=()=>{
@@ -501,7 +502,7 @@ async function startSpeech(){
         showToast('🎤 Aufnahme gestartet - Sprechen Sie jetzt!');
     }catch(e){
         console.error('Speech init error:',e);
-        showToast('Fehler beim Starten der Spracherkennung: '+e.message);
+        showToast('Fehler beim Starten der Spracherkennung. Bitte Browser neu starten.');
         recognition=null;
         render();
     }
